@@ -5,7 +5,7 @@ import time
 import signal
 import sys
 
-#GPIO.setwarnings(False)
+# GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 segmentClock = 11
@@ -13,13 +13,13 @@ segmentLatch = 13
 segmentData = 14
 numDisplays = 7
 
-GPIO.setup(segmentClock,GPIO.OUT)
-GPIO.setup(segmentData,GPIO.OUT)
-GPIO.setup(segmentLatch,GPIO.OUT)
+GPIO.setup(segmentClock, GPIO.OUT)
+GPIO.setup(segmentData, GPIO.OUT)
+GPIO.setup(segmentLatch, GPIO.OUT)
 
-GPIO.output(segmentClock,GPIO.LOW)
-GPIO.output(segmentData,GPIO.LOW)
-GPIO.output(segmentLatch,GPIO.LOW)
+GPIO.output(segmentClock, GPIO.LOW)
+GPIO.output(segmentData, GPIO.LOW)
+GPIO.output(segmentLatch, GPIO.LOW)
 
 
 def signal_handler(sig, frame):
@@ -61,17 +61,18 @@ def show_number(value):
         GPIO.output(segmentLatch,GPIO.LOW)
         GPIO.output(segmentLatch,GPIO.HIGH) # Register moves storage register on the rising edge of RCK
 
+
 # Given a number, or - shifts it out to the display
 def post_number(number, decimal):
     segments = bytes()
-    a = 1<<0
-    b = 1<<6
-    c = 1<<5
-    d = 1<<4
-    e = 1<<3
-    f = 1<<1
-    g = 1<<2
-    dp = 1<<7
+    a = 1 << 0
+    b = 1 << 6
+    c = 1 << 5
+    d = 1 << 4
+    e = 1 << 3
+    f = 1 << 1
+    g = 1 << 2
+    dp = 1 << 7
 
     if number == 1: segments = b | c
     elif number == 2: segments = a | b | d | e | g
@@ -92,9 +93,9 @@ def post_number(number, decimal):
     #   if ((decimal segments) |= dp ):
     y = 0
     while y < 8:
-        GPIO.output(segmentClock,GPIO.LOW)
-        GPIO.output(segmentData,segments & 1 << (7-y))
-        GPIO.output(segmentClock,GPIO.HIGH)
+        GPIO.output(segmentClock, GPIO.LOW)
+        GPIO.output(segmentData, segments & 1 << (7-y))
+        GPIO.output(segmentClock, GPIO.HIGH)
         y += 1
 
 
