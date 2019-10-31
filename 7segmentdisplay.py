@@ -11,7 +11,7 @@ GPIO.setmode(GPIO.BCM)
 segmentClock = 11
 segmentLatch = 13
 segmentData = 14
-numDisplays = 1
+numDisplays = 7
 
 GPIO.setup(segmentClock,GPIO.OUT)
 GPIO.setup(segmentData,GPIO.OUT)
