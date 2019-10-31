@@ -36,7 +36,7 @@ def loop(number):
 def show(value):
 
     for symbol in value:
-        print("Symbol: {}".format(symbol))
+        print("Displaying symbol: {}".format(symbol))
         post_character(symbol)
         GPIO.output(segmentLatch, GPIO.LOW)
         GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
@@ -64,6 +64,20 @@ def post_character(symbol, show_decimal=False):
     elif symbol == 8: segments = a | b | c | d | e | f | g
     elif symbol == 9: segments = a | b | c | d | f | g
     elif symbol == 0: segments = a | b | c | d | e | f
+    elif symbol == "1": segments = b | c
+    elif symbol == "2": segments = a | b | d | e | g
+    elif symbol == "3": segments = a | b | c | d | g
+    elif symbol == "4": segments = b | c | f | g
+    elif symbol == "5": segments = a | c | d | f | g
+    elif symbol == "6": segments = a | c | d | e | f | g
+    elif symbol == "7": segments = a | b | c
+    elif symbol == "8": segments = a | b | c | d | e | f | g
+    elif symbol == "9": segments = a | b | c | d | f | g
+    elif symbol == "0": segments = a | b | c | d | e | f
+    elif symbol == "A" or "a": segments = a | b | c | e | f | g
+    elif symbol == "B" or "b": segments = a | b | c | d | e | f | g
+    elif symbol == "S" or "s": segments = a | c | d | f | g
+    elif symbol == "U" or "u": segments = b | c | d | e | f
     elif symbol == ' ': segments = 0
     elif symbol == 'c': segments = g | e | d
     elif symbol == '-': segments = g
@@ -81,19 +95,11 @@ def post_character(symbol, show_decimal=False):
 
 
 def main():
-    show("-123 45")
-#    number = 0
-#    while True:
-#        x_num = ''
-#        print(number)
-#        for n in range(1):
-#            x_num = x_num + str(number)
-#        print(int(x_num))
-#        loop(x_num)
-#        time.sleep(1)
-#        number = number + 1
-#        if number > 9:
-#            number = 0
+    while True:
+        show("-123 45")
+        time.sleep(2)
+        show("SB1 U")
+        time.sleep(2)
 
 
 if __name__ == '__main__':
