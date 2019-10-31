@@ -40,6 +40,9 @@ def clear():
         post_character(" ")
         moveToNextSegment()
 
+    while not currentPosition == 0:
+        moveToNextSegment()
+
 
 def show(value):
     while not currentPosition == 0:
