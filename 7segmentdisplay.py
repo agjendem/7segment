@@ -30,41 +30,20 @@ def signal_handler(sig, frame):
 
 
 def loop(number):
-    show_number(float(number))  # Test Pattern
+    show(float(number))  # Test Pattern
 
 
-def show_number(value):
-    number = abs(value) # Remove negative signs and any decimals
+def show(value):
 
-    '''
-    if number >= 100:
-        remainder = number % 100
-        post_number(remainder % 10, False)
-        remainder = number % 10
-        post_number(remainder, False)
-        number = int(number / 10)
-        post_number(number, False)
-    elif number >= 10:
-        remainder = number % 10
-        post_number(remainder, False)
-        number = int(number / 10)
-        post_number(number, False)
-    else:
-        post_number(number, False)
-        post_number("0", False)
-
-    # Latch the current segment data
-    GPIO.output(segmentLatch,GPIO.LOW)
-    GPIO.output(segmentLatch,GPIO.HIGH) # Register moves storage register on the rising edge of RCK
-    '''
-    for a in range(numDisplays):
-        post_number(number, False)
+    for symbol in value:
+        print("Symbol: {}".format(symbol))
+        post_character(symbol)
         GPIO.output(segmentLatch, GPIO.LOW)
         GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
 
 
 # Given a number, or - shifts it out to the display
-def post_number(number, decimal):
+def post_character(symbol, show_decimal=False):
     segments = bytes()
     a = 1 << 0
     b = 1 << 6
@@ -75,23 +54,24 @@ def post_number(number, decimal):
     g = 1 << 2
     dp = 1 << 7
 
-    if number == 1: segments = b | c
-    elif number == 2: segments = a | b | d | e | g
-    elif number == 3: segments = a | b | c | d | g
-    elif number == 4: segments = b | c | f | g
-    elif number == 5: segments = a | c | d | f | g
-    elif number == 6: segments = a | c | d | e | f | g
-    elif number == 7: segments = a | b | c
-    elif number == 8: segments = a | b | c | d | e | f | g
-    elif number == 9: segments = a | b | c | d | f | g
-    elif number == 0: segments = a | b | c | d | e | f
-    elif number == ' ': segments = 0
-    elif number == 'c': segments = g | e | d
-    elif number == '-': segments = g
+    if symbol == 1: segments = b | c
+    elif symbol == 2: segments = a | b | d | e | g
+    elif symbol == 3: segments = a | b | c | d | g
+    elif symbol == 4: segments = b | c | f | g
+    elif symbol == 5: segments = a | c | d | f | g
+    elif symbol == 6: segments = a | c | d | e | f | g
+    elif symbol == 7: segments = a | b | c
+    elif symbol == 8: segments = a | b | c | d | e | f | g
+    elif symbol == 9: segments = a | b | c | d | f | g
+    elif symbol == 0: segments = a | b | c | d | e | f
+    elif symbol == ' ': segments = 0
+    elif symbol == 'c': segments = g | e | d
+    elif symbol == '-': segments = g
     else: segments = 0
 
-    ## TODO: Mistake likely here:
-    #   if ((decimal segments) |= dp ):
+    if show_decimal:
+        segments |= dp
+
     y = 0
     while y < numSegments:
         GPIO.output(segmentClock, GPIO.LOW)
@@ -101,18 +81,19 @@ def post_number(number, decimal):
 
 
 def main():
-    number = 0
-    while True:
-        x_num = ''
-        print(number)
-        for n in range(1):
-            x_num = x_num + str(number)
-        print(int(x_num))
-        loop(x_num)
-        time.sleep(1)
-        number = number + 1
-        if number > 9:
-            number = 0
+    show("-123 45")
+#    number = 0
+#    while True:
+#        x_num = ''
+#        print(number)
+#        for n in range(1):
+#            x_num = x_num + str(number)
+#        print(int(x_num))
+#        loop(x_num)
+#        time.sleep(1)
+#        number = number + 1
+#        if number > 9:
+#            number = 0
 
 
 if __name__ == '__main__':
