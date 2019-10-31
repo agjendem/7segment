@@ -12,6 +12,7 @@ segmentClock = 11
 segmentLatch = 13
 segmentData = 14
 numDisplays = 7
+numSegments = 8  # 7 + dot
 
 GPIO.setup(segmentClock, GPIO.OUT)
 GPIO.setup(segmentData, GPIO.OUT)
@@ -29,7 +30,7 @@ def signal_handler(sig, frame):
 
 
 def loop(number):
-    show_number(float(number)) # Test Pattern
+    show_number(float(number))  # Test Pattern
 
 
 def show_number(value):
@@ -58,8 +59,8 @@ def show_number(value):
     '''
     for a in range(numDisplays):
         post_number(number, False)
-        GPIO.output(segmentLatch,GPIO.LOW)
-        GPIO.output(segmentLatch,GPIO.HIGH) # Register moves storage register on the rising edge of RCK
+        GPIO.output(segmentLatch, GPIO.LOW)
+        GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
 
 
 # Given a number, or - shifts it out to the display
@@ -87,12 +88,12 @@ def post_number(number, decimal):
     elif number == ' ': segments = 0
     elif number == 'c': segments = g | e | d
     elif number == '-': segments = g
-    else : segments = 0
+    else: segments = 0
 
     ## TODO: Mistake likely here:
     #   if ((decimal segments) |= dp ):
     y = 0
-    while y < 8:
+    while y < numSegments:
         GPIO.output(segmentClock, GPIO.LOW)
         GPIO.output(segmentData, segments & 1 << (7-y))
         GPIO.output(segmentClock, GPIO.HIGH)
@@ -102,7 +103,7 @@ def post_number(number, decimal):
 def main():
     number = 0
     while True:
-        x_num=''
+        x_num = ''
         print(number)
         for n in range(1):
             x_num = x_num + str(number)
