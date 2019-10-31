@@ -34,6 +34,13 @@ def loop(number):
     show(float(number))  # Test Pattern
 
 
+def clear():
+    print("Clearing displays")
+    for i in range(numSegments - 1):
+        post_character(" ")
+        moveToNextSegment()
+
+
 def show(value):
     while not currentPosition == 0:
         moveToNextSegment()
@@ -47,11 +54,13 @@ def show(value):
 
 
 def moveToNextSegment():
+    global currentPosition
+
     GPIO.output(segmentLatch, GPIO.LOW)
     GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
 
-    global currentPosition
-    if currentPosition == numDisplays:
+    print("Moving to next segment, was {}".format(currentPosition))
+    if currentPosition == numDisplays - 1:
         currentPosition = 0
     else:
         currentPosition += 1
@@ -89,10 +98,10 @@ def post_character(symbol, show_decimal=False):
     elif symbol == "8": segments = a | b | c | d | e | f | g
     elif symbol == "9": segments = a | b | c | d | f | g
     elif symbol == "0": segments = a | b | c | d | e | f
-    elif symbol == "A" or "a": segments = a | b | c | e | f | g
-    elif symbol == "B" or "b": segments = a | b | c | d | e | f | g
-    elif symbol == "S" or "s": segments = a | c | d | f | g
-    elif symbol == "U" or "u": segments = b | c | d | e | f
+    elif symbol == "A" or symbol == "a": segments = a | b | c | e | f | g
+    elif symbol == "B" or symbol == "b": segments = a | b | c | d | e | f | g
+    elif symbol == "S" or symbol == "s": segments = a | c | d | f | g
+    elif symbol == "U" or symbol == "u": segments = b | c | d | e | f
     elif symbol == ' ': segments = 0
     elif symbol == 'c': segments = g | e | d
     elif symbol == '-': segments = g
@@ -113,6 +122,10 @@ def main():
     while True:
         show("-123 45")
         time.sleep(2)
+
+        clear()
+        time.sleep(2)
+
         show("SB1 U")
         time.sleep(2)
 
