@@ -13,6 +13,7 @@ segmentLatch = 13
 segmentData = 14
 numDisplays = 7
 numSegments = 8  # 7 + dot
+currentPosition = 0
 
 GPIO.setup(segmentClock, GPIO.OUT)
 GPIO.setup(segmentData, GPIO.OUT)
@@ -34,12 +35,26 @@ def loop(number):
 
 
 def show(value):
+    while not currentPosition == 0:
+        moveToNextSegment()
 
     for symbol in value:
         print("Displaying symbol: {}".format(symbol))
         post_character(symbol)
-        GPIO.output(segmentLatch, GPIO.LOW)
-        GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
+
+        # Keep track of position:
+        moveToNextSegment()
+
+
+def moveToNextSegment():
+    GPIO.output(segmentLatch, GPIO.LOW)
+    GPIO.output(segmentLatch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
+
+    global currentPosition
+    if currentPosition == numDisplays:
+        currentPosition = 0
+    else:
+        currentPosition += 1
 
 
 # Given a number, or - shifts it out to the display
