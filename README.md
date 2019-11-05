@@ -1,7 +1,7 @@
 Software to control 7-segment displays.
 
 # Software:
-Based on code found in the comments section of the [SparkFun Hookup Guide](https://learn.sparkfun.com/tutorials/large-digit-driver-hookup-guide/all). Thanks to [Member #910971](https://www.sparkfun.com/users/910971) and [Member #642108](https://www.sparkfun.com/users/642108).
+Based on code found in the comments section of the [SparkFun Hookup Guide](https://learn.sparkfun.com/tutorials/large-digit-driver-hookup-guide/discuss). Thanks to [Member #910971](https://www.sparkfun.com/users/910971) and [Member #642108](https://www.sparkfun.com/users/642108).
 
 This code is further improved to easily support multiple displays, as well as text/numbers, with scrolling.
 
