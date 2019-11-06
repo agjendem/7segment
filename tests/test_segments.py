@@ -1,5 +1,5 @@
-import unittest
-from segments import Segments
+from unittest import TestCase
+from rpi_7segment import Segments
 
 
 def last(states):
@@ -10,7 +10,7 @@ def first(states):
     return states[0]
 
 
-class SegmentTest(unittest.TestCase):
+class SegmentTest(TestCase):
 
     def setUp(self):
         # Test without displays/GPIO-functionality disabled.
