@@ -90,19 +90,18 @@ class Segments:
             display_value = "{text:>}".format(text=value)
             self._debug("String: In: '{}' Out: '{}'".format(value, display_value))
 
-            display_value = display_value[::-1]  # Reversed as we're visualizing from left to right on the displays
             if not (display_value[-1] == '.' or display_value[-1] == ','):
                 for i in range(len(display_value)):
                     if display_value[i] == '.' or display_value[i] == ',':
                         continue
 
                     if i > 0 and (display_value[i - 1] == '.' or display_value[i - 1] == ','):
-                        self.post_character(display_value[i], show_decimal=True)
                         self.move_to_next_segment()
+                        self.post_character(display_value[i], show_decimal=True)
                         i += 1
                     else:
-                        self.post_character(display_value[i])
                         self.move_to_next_segment()
+                        self.post_character(display_value[i])
 
     @staticmethod
     def _get_next_digit(value):
@@ -119,10 +118,10 @@ class Segments:
             GPIO.output(self._segment_latch, GPIO.HIGH)  # Register moves storage register on the rising edge of RCK
 
         self._debug("Moving to next segment, was {}".format(self._current_position))
-        if self._current_position == self._num_displays - 1:
-            self._current_position = 0
+        if self._current_position == 0:
+            self._current_position = self._num_displays - 1
         else:
-            self._current_position += 1
+            self._current_position -= 1
 
     # Given a number, or - shifts it out to the display
     def post_character(self, symbol, show_decimal=False):
